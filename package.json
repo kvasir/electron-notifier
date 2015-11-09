@@ -1,0 +1,52 @@
+{
+  "name": "electron-notifier",
+  "version": "0.0.0",
+  "description": "Add cross-platform notifications to Electron apps.",
+  "repository": "kvasir/electron-notifier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kvasir/electron-notifier/issues"
+  },
+  "homepage": "https://github.com/kvasir/electron-notifier#readme",
+  "author": "Kvasir",
+  "contributors": [
+    "John-Philip Johansson <seriema@gmail.com> (http://johansson.jp/)",
+    "Martin Sandström <maartiin_91@hotmail.com> (http://martinsandstrom.github.io)",
+    "Esbjörn Ekberg <oakninja@gmail.com> (http://oak.ninja/)"
+  ],
+  "scripts": {
+    "test": "xo",
+    "start": "electron test.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "electron",
+    "electron-notification-shim",
+    "demo",
+    "app",
+    "dev",
+    "notification",
+    "notify",
+    "toaster",
+    "balloon",
+    "growl",
+    "shim"
+  ],
+  "dependencies": {
+    "node-notifier": "^4.3.1"
+  },
+  "devDependencies": {
+    "electron-debug": "^0.4.0",
+    "electron-prebuilt": "^0.34.1",
+    "xo": "^0.10.0"
+  },
+  "xo": {
+    "esnext": true,
+    "envs": [
+      "node",
+      "browser"
+    ]
+  }
+}
