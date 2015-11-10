@@ -5,6 +5,10 @@ const renderBadge = require('./render-badge');
 
 let notificationCounter = 0;
 
+function removeBadge() {
+	notificationCounter = 0;
+}
+
 module.exports = () => {
 	//require('electron-notification-shim')();
 	const OldNotification = Notification;
@@ -45,4 +49,5 @@ module.exports = () => {
 	Notification.prototype = OldNotification.prototype;
 	Notification.permission = OldNotification.permission;
 	Notification.requestPermission = OldNotification.requestPermission;
+	ipc.on('reset-notifications', () => removeBadge());
 };

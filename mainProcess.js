@@ -85,6 +85,7 @@ module.exports = options => {
 			if (response.trim() === 'Activate') {
 				win.focus();
 				hideBadge(win);
+				win.webContents.send('reset-notifications');
 			}
 		});
 	});
