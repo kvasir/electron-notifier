@@ -1,12 +1,46 @@
 'use strict';
 
+const app = require('app');
 const ipc = require('ipc');
 const notifier = require('node-notifier');
 const path = require('path');
 const BrowserWindow = require('browser-window');
+const NativeImage = require('native-image');
+
+const badge = NativeImage.createFromPath(path.join(__dirname, 'media/dot.png'));
 
 module.exports = options => {
-	options = options || {};
+	options = options || {
+			badge: true,
+			bounce: true,
+			balloons: false,
+			toasters: true,
+			sound: true
+		};
+
+	function showBadge(win) {
+		if (!options.badge) {
+			return;
+		}
+
+		if (process.platform === 'darwin') {
+			app.dock.setBadge(' ');
+		} else if (process.platform === 'win32') {
+			win.setOverlayIcon(badge, 'You have unread messages');
+		}
+	}
+
+	function hideBadge(win) {
+		if (!options.badge) {
+			return;
+		}
+
+		if (process.platform === 'darwin') {
+			app.dock.setBadge('');
+		} else if (process.platform === 'win32') {
+			win.setOverlayIcon(null, '');
+		}
+	}
 
 	ipc.on('notification-shim', (e, data) => {
 		const win = BrowserWindow.fromWebContents(e.sender);
@@ -16,12 +50,17 @@ module.exports = options => {
 			icon = path.join(__dirname, data.icon || options.icon);
 		}
 
+		showBadge(win);
+
 		const notification = {
 			title: data.title,
 			message: data.body,
-			icon, // absolute path (not balloons)
-			sound: options.sound && !data.silent, // Only Notification Center or Windows Toasters
-			wait: options.wait !== false // must set it explicitly to false to be false
+			// absolute path (not balloons)
+			icon,
+			// Only Notification Center or Windows Toasters
+			sound: options.sound && !data.silent,
+			// must set it explicitly to false to be false
+			wait: options.wait !== false
 		};
 
 		notifier.notify(notification, (err, response) => {
@@ -31,6 +70,7 @@ module.exports = options => {
 
 			if (response.trim() === 'Activate') {
 				win.focus();
+				hideBadge(win);
 			}
 		});
 	});
