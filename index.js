@@ -1,6 +1,6 @@
 'use strict';
 
 module.exports = {
-	mainProcess: () => require('./mainProcess')(),
+	mainProcess: options => require('./mainProcess')(options),
 	webPage: () => require('./webPage')()
 };

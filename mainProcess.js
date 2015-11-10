@@ -6,7 +6,7 @@ const path = require('path');
 const BrowserWindow = require('browser-window');
 
 module.exports = options => {
-	options = {};
+	options = options || {};
 
 	ipc.on('notification-shim', (e, data) => {
 		const win = BrowserWindow.fromWebContents(e.sender);
