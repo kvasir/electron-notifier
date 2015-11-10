@@ -20,7 +20,7 @@ module.exports = options => {
 
 	function setBadge(win, badgeDataUrl, count) {
 		if (process.platform === 'darwin') {
-			app.dock.setBadge(count);
+			app.dock.setBadge(count.toString());
 		} else if (process.platform === 'win32') {
 			const img = NativeImage.createFromDataUrl(badgeDataUrl);
 
@@ -63,7 +63,7 @@ module.exports = options => {
 
 		if (data.badge) {
 			showBadge(win);
-			//setBadge(win, data.badge, data.count);
+			setBadge(win, data.badge, data.count);
 		}
 
 		const notification = {
