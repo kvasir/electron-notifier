@@ -1,6 +1,9 @@
 'use strict';
 
 const ipc = require('ipc');
+const renderBadge = require('./render-badge');
+
+let notificationCounter = 0;
 
 module.exports = () => {
 	//require('electron-notification-shim')();
@@ -22,7 +25,9 @@ module.exports = () => {
 			onshow: null,
 			silent: false,
 			tag: '',
-			title
+			title,
+			badge: renderBadge(notificationCounter.toString()),
+			count: ++notificationCounter
 		};
 
 		// Send the native Notification.

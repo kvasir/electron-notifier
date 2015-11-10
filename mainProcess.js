@@ -11,12 +11,22 @@ const badge = NativeImage.createFromPath(path.join(__dirname, 'media/dot.png'));
 
 module.exports = options => {
 	options = options || {
-			badge: true,
-			bounce: true,
-			balloons: false,
-			toasters: true,
-			sound: true
-		};
+		badge: true,
+		bounce: true,
+		balloons: false,
+		toasters: true,
+		sound: true
+	};
+
+	function setBadge(win, badgeDataUrl, count) {
+		if (process.platform === 'darwin') {
+			app.dock.setBadge(count);
+		} else if (process.platform === 'win32') {
+			const img = NativeImage.createFromDataUrl(badgeDataUrl);
+
+			win.setOverlayIcon(img, 'You have unread messages');
+		}
+	}
 
 	function showBadge(win) {
 		if (!options.badge) {
@@ -44,13 +54,17 @@ module.exports = options => {
 
 	ipc.on('notification-shim', (e, data) => {
 		const win = BrowserWindow.fromWebContents(e.sender);
+		const badgeData = require('./render-badge');
 
 		let icon;
 		if (data.icon || options.icon) {
 			icon = path.join(__dirname, data.icon || options.icon);
 		}
 
-		showBadge(win);
+		if (data.badge) {
+			showBadge(win);
+			//setBadge(win, data.badge, data.count);
+		}
 
 		const notification = {
 			title: data.title,
