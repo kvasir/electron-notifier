@@ -57,6 +57,10 @@ module.exports = options => {
 			removeBadge(window);
 			window.webContents.send('reset-notifications');
 		});
+
+		window.webContents.on('did-finish-load', () => {
+			window.webContents.executeJavaScript('require(".").webPage();');
+		});
 	});
 
 	ipc.on('notification-shim', (e, data) => {
