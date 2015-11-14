@@ -55,7 +55,7 @@ module.exports = options => {
 	app.on('browser-window-created', (e, window) => {
 		window.on('focus', () => {
 			removeBadge(window);
-			window.webContents.send('reset-notifications')
+			window.webContents.send('reset-notifications');
 		});
 	});
 
