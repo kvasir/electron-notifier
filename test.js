@@ -1,6 +1,7 @@
 'use strict';
 const app = require('app');
 const BrowserWindow = require('browser-window');
+const path = require('path');
 
 // report crashes to the Electron project
 require('crash-reporter').start();
@@ -22,8 +23,12 @@ function onClosed() {
 
 function createMainWindow() {
 	const win = new BrowserWindow({
-		width: 600,
-		height: 400
+		'width': 600,
+		'height': 400,
+
+		'web-preferences': {
+			preload: path.join(__dirname, 'webPageRequirer.js')
+		}
 	});
 
 	win.loadUrl(`file://${__dirname}/test.html`);
