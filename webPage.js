@@ -5,10 +5,6 @@ const renderBadge = require('./render-badge');
 
 let notificationCounter = 0;
 
-function removeBadge() {
-	notificationCounter = 0;
-}
-
 module.exports = () => {
 	//require('electron-notification-shim')();
 	const OldNotification = Notification;
@@ -17,6 +13,7 @@ module.exports = () => {
 		// Send this to main thread.
 		// Catch it in your main 'app' instance with `ipc.on`.
 		// Then send it back to the view, if you want, with `event.returnValue` or `event.sender.send()`.
+		notificationCounter++;
 		let opts = {
 			body: '',
 			data: null,
@@ -31,7 +28,7 @@ module.exports = () => {
 			tag: '',
 			title,
 			badge: renderBadge(notificationCounter.toString()),
-			count: ++notificationCounter
+			count: notificationCounter
 		};
 
 		// Send the native Notification.
@@ -49,5 +46,6 @@ module.exports = () => {
 	Notification.prototype = OldNotification.prototype;
 	Notification.permission = OldNotification.permission;
 	Notification.requestPermission = OldNotification.requestPermission;
-	ipc.on('reset-notifications', () => removeBadge());
+
+	ipc.on('reset-notifications', () => notificationCounter = 0);
 };

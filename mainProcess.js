@@ -40,7 +40,7 @@ module.exports = options => {
 		}
 	}
 
-	function hideBadge(win) {
+	function removeBadge(win) {
 		if (!options.badge) {
 			return;
 		}
@@ -53,11 +53,14 @@ module.exports = options => {
 	}
 
 	app.on('browser-window-created', (e, window) => {
+		window.on('focus', () => {
+			removeBadge(window);
+			window.webContents.send('reset-notifications')
+		});
 	});
 
 	ipc.on('notification-shim', (e, data) => {
 		const win = BrowserWindow.fromWebContents(e.sender);
-		const badgeData = require('./render-badge');
 
 		let icon;
 		if (data.icon || options.icon) {
@@ -87,8 +90,6 @@ module.exports = options => {
 
 			if (response.trim() === 'Activate') {
 				win.focus();
-				hideBadge(win);
-				win.webContents.send('reset-notifications');
 			}
 		});
 	});
