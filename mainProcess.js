@@ -52,6 +52,9 @@ module.exports = options => {
 		}
 	}
 
+	app.on('browser-window-created', (e, window) => {
+	});
+
 	ipc.on('notification-shim', (e, data) => {
 		const win = BrowserWindow.fromWebContents(e.sender);
 		const badgeData = require('./render-badge');
